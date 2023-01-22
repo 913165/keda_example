@@ -3,30 +3,21 @@ kind: Secret
 metadata:
   name: rb-conn-secret
 data:
-  secret-key-name: YW1xcDovL2d1ZXN0Omd1ZXN0QDIwLjIyOC4xMjYuMjM5OjU2NzI=
+  host: YW1xcDovL2d1ZXN0Omd1ZXN0QDIwLjIyOC4xMjYuMjM5OjU2NzI=
+  
 ---
-apiVersion: apps/v1
-kind: Deployment # Kubernetes resource kind we are creating
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
 metadata:
-  name: java-rabbitmq-consumer
+  name: rb-trigger-auth-conn
+  namespace: default
 spec:
-  replicas: 5
-  selector:
-    matchLabels:
-      app: java-rabbitmq-consumer
-  template:
-    metadata:
-      labels:
-        app: java-rabbitmq-consumer
-    spec:
-      containers:
-        - name: java-rabbitmq-consumer
-          image: docker.io/tinumistry/javarabbitmqconsumer:1.8
-          imagePullPolicy: IfNotPresent
-          envFrom:
-          - secretRef:
-             name: rb-conn-secret
+  secretTargetRef:
+    - parameter: host
+      name: rb-conn-secret
+      key: host
 ---
+
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
@@ -45,4 +36,5 @@ spec:
         queueName: queue001
         mode: QueueLength
         value: "5"
-        host: secret-key-name	
+      authenticationRef:
+        name: rb-trigger-auth-conn   
