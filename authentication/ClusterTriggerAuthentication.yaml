@@ -7,10 +7,9 @@ data:
   
 ---
 apiVersion: keda.sh/v1alpha1
-kind: TriggerAuthentication
+kind: ClusterTriggerAuthentication
 metadata:
-  name: rb-trigger-auth-conn
-  namespace: default
+  name: rb-cluster-trigger-auth-conn
 spec:
   secretTargetRef:
     - parameter: host
@@ -37,4 +36,5 @@ spec:
         mode: QueueLength
         value: "5"
       authenticationRef:
-        name: rb-trigger-auth-conn   
+        name: rb--cluster-trigger-auth-conn   
+        kind: ClusterTriggerAuthentication
