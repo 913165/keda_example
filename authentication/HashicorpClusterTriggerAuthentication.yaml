@@ -1,31 +1,18 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: rb-conn-secret
-data:
-  host: YW1xcDovL2d1ZXN0Omd1ZXN0QDIwLjIyOC4xMjYuMjM5OjU2NzI=
-  
----
 apiVersion: keda.sh/v1alpha1
 kind: ClusterTriggerAuthentication
 metadata:
   name: rb-cluster-trigger-auth-conn
 spec:
-  secretTargetRef:
-    - parameter: host
-      name: rb-conn-secret
-      key: host
   hashiCorpVault:
    address: http://104.42.169.125:8200
    authentication: token
    credential:
      token: myroot 
    secrets:
-   - parameter: queryKey
-     key: keda-nr-key
-     path: /kv-v1/keda/secret    
+   - parameter: rabbitmq-scaledobject
+     key: host
+     path: test/rabbitmq   
 ---
-
 apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
