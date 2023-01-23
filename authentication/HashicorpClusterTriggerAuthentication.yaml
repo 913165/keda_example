@@ -16,12 +16,10 @@ spec:
       name: rb-conn-secret
       key: host
   hashiCorpVault:
-   address: http://192.168.0.4:8200
-   authentication: kubernetes
-   role: keda
-   mount: kubernetes
+   address: http://104.42.169.125:8200
+   authentication: token
    credential:
-     serviceAccount: /var/run/secrets/kubernetes.io/serviceaccount/token
+     token: myroot 
    secrets:
    - parameter: queryKey
      key: keda-nr-key
